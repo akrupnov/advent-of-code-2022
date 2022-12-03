@@ -31,6 +31,46 @@ namespace Solutions
             var moves = Input.Split(Environment.NewLine).Select(p => new Tuple<GameMove, GameMove>(ParseMove(p.Split(" ")[0]), ParseMove(p.Split(" ")[1])));
             return moves.Sum(gm => CalculateScore(gm.Item1, gm.Item2)).ToString();
         }
+
+        public String SolvePartTwo()
+        {
+            var moves = Input.Split(Environment.NewLine).Select(p => new Tuple<GameMove, GameResult>(ParseMove(p.Split(" ")[0]), ParseResult(p.Split(" ")[1])));
+            return moves.Sum(gm => CalculateScore(gm.Item1, CalculateMove(gm.Item1, gm.Item2))).ToString();
+        }
+
+        private GameMove CalculateMove(GameMove opponentMove, GameResult expectedResult)
+        {
+            if(expectedResult == GameResult.Draw)
+                return opponentMove;
+
+            if(opponentMove == GameMove.Rock)
+            {
+                if(expectedResult == GameResult.Win)
+                {
+                    return GameMove.Paper;
+                }
+                return GameMove.Scissors;
+            } 
+            else if(opponentMove == GameMove.Paper)
+            {
+                if(expectedResult == GameResult.Win)
+                {
+                    return GameMove.Scissors;
+                }
+                return GameMove.Rock;
+            }
+            else if(opponentMove == GameMove.Scissors)
+            {
+                if(expectedResult == GameResult.Win)
+                {
+                    return GameMove.Rock;
+                }
+                return GameMove.Paper;
+            }
+            throw new Exception("Impossible to reach here, please call tech support");
+
+        }
+
         private Int32 CalculateScore(GameMove opponentMove, GameMove playerMove)
         {
             var baseResult = Convert.ToInt32(playerMove);
@@ -63,6 +103,18 @@ namespace Solutions
                 return GameMove.Scissors;
 
             throw new Exception($"Unknown move {move}");
+        }
+        private GameResult ParseResult(string value)
+        {
+            if(value == "X")
+                return GameResult.Lose;
+            if(value == "Y")
+                return GameResult.Draw;
+            if(value == "Z")
+                return GameResult.Win;
+                
+            throw new Exception($"Unknown result {value}");
+
         }
     }
 }
