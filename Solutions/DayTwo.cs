@@ -11,6 +11,12 @@ namespace Solutions
         Paper = 2, 
         Scissors = 3
     }
+    public enum GameResult
+    {
+        Lose = 0,
+        Draw = 3,
+        Win = 6
+    }
     public class DayTwo
     {        
         public String Input { get; set; }
@@ -28,44 +34,23 @@ namespace Solutions
         private Int32 CalculateScore(GameMove opponentMove, GameMove playerMove)
         {
             var baseResult = Convert.ToInt32(playerMove);
-            var moveResult = 0;
+            
+            var moveResult = GameResult.Lose;
             if(opponentMove == playerMove)
-                moveResult = 3;
+                moveResult = GameResult.Draw;
 
-            if(opponentMove == GameMove.Rock)
+            if(opponentMove == GameMove.Rock && playerMove == GameMove.Paper)
             {
-                if(playerMove == GameMove.Paper)
-                {
-                    moveResult = 6;
-                }
-                else if(playerMove == GameMove.Scissors)
-                {
-                    moveResult = 0;
-                }
-            } else if(opponentMove == GameMove.Paper)
+                    moveResult = GameResult.Win;
+            } else if(opponentMove == GameMove.Paper && playerMove == GameMove.Scissors)
             {
-                if(playerMove == GameMove.Rock)
-                {
-                    moveResult = 0;
-                }
-                else if(playerMove == GameMove.Scissors)
-                {
-                    moveResult = 6;
-                }
-
-            }else if(opponentMove == GameMove.Scissors)
-{
-                if(playerMove == GameMove.Rock)
-                {
-                    moveResult = 6;
-                }
-                else if(playerMove == GameMove.Paper)
-                {
-                    moveResult = 0;
-                }
+                moveResult = GameResult.Win;
+            }else if(opponentMove == GameMove.Scissors && playerMove == GameMove.Rock)
+            {
+                    moveResult = GameResult.Win;
 
             }
-            return baseResult + moveResult;
+            return baseResult + Convert.ToInt32(moveResult);
         }
 
         private GameMove ParseMove(String move)
