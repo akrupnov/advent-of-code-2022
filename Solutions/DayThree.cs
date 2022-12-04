@@ -21,6 +21,13 @@ namespace Solutions
                 ).Select(x => x.Item1.Intersect(x.Item2).First()).Sum(x => GetCharPriority(x));
             return r.ToString();
         }
+        public String SolvePartTwo()
+        {
+            var r = input.Split(Environment.NewLine).Select(x => x.ToHashSet()).Chunk(3).
+                Select(g => g.First().Intersect(g.Skip(1).First()).Intersect(g.Skip(2).First())).Sum(x => GetCharPriority(x.First()));
+
+            return r.ToString();
+        }
 
         private Int32 GetCharPriority(Char character)
         {
