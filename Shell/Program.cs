@@ -17,3 +17,4 @@ Console.WriteLine("Day 4 pt. 2. Count of partially overlapping assignments: " + 
 */
 
 Console.WriteLine("Day 5 pt. 1. The sequence of top crates is: " + new DayFive(File.ReadAllText("./input/day5")).SolvePartOne());
+Console.WriteLine("Day 5 pt. 2. The sequence of top crates is: " + new DayFive(File.ReadAllText("./input/day5")).SolvePartTwo());
