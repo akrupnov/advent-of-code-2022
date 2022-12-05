@@ -13,3 +13,4 @@ Console.WriteLine("Day 3 pt. 1. Sum of all priorities: " + new DayThree(File.Rea
 Console.WriteLine("Day 3 pt. 2. Sum of all priorities for the badges: " + new DayThree(File.ReadAllText("./input/day3")).SolvePartTwo());
 */
 Console.WriteLine("Day 4 pt. 1. Count of fully overlapping assignments: " + new DayFour(File.ReadAllText("./input/day4")).SolvePartOne());
+Console.WriteLine("Day 4 pt. 2. Count of partially overlapping assignments: " + new DayFour(File.ReadAllText("./input/day4")).SolvePartTwo());
