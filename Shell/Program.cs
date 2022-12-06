@@ -14,7 +14,11 @@ Console.WriteLine("Day 3 pt. 2. Sum of all priorities for the badges: " + new Da
 
 Console.WriteLine("Day 4 pt. 1. Count of fully overlapping assignments: " + new DayFour(File.ReadAllText("./input/day4")).SolvePartOne());
 Console.WriteLine("Day 4 pt. 2. Count of partially overlapping assignments: " + new DayFour(File.ReadAllText("./input/day4")).SolvePartTwo());
-*/
+
 
 Console.WriteLine("Day 5 pt. 1. The sequence of top crates is: " + new DayFive(File.ReadAllText("./input/day5")).SolvePartOne());
 Console.WriteLine("Day 5 pt. 2. The sequence of top crates is: " + new DayFive(File.ReadAllText("./input/day5")).SolvePartTwo());
+
+*/
+
+Console.WriteLine("Day 6 pt. 1. Index of first sequence start: " + new DaySix(File.ReadAllText("./input/day6")).SolvePartOne());
