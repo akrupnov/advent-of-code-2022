@@ -38,7 +38,27 @@ namespace Solutions
 
         public override string SolvePartTwo()
         {
-            throw new NotImplementedException();
+            var slidingSet = new HashSet<Char>();
+            var sequenceCounter = 0;
+
+            for(var i = 0; i < Input.Length; i++)
+            {
+                sequenceCounter++;
+
+                slidingSet.Add(Input[i]);
+                if(sequenceCounter % 14 == 0 && slidingSet.Count == 14)
+                {
+                    return (i + 1).ToString();
+                }
+                else if(sequenceCounter > 0 && sequenceCounter % 14 == 0)
+                {
+                    i = i - 13;
+                    sequenceCounter = 0;
+                    slidingSet.Clear();
+                }
+            }
+
+            throw new Exception("Unable to find a solution, I am sorry");
         }
     }
 }
