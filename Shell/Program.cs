@@ -22,5 +22,6 @@ Console.WriteLine("Day 5 pt. 2. The sequence of top crates is: " + new DayFive(F
 
 
 Console.WriteLine("Day 6 pt. 1. Index of first sequence start: " + new DaySix(File.ReadAllText("./input/day6")).SolvePartOne());
-*/
 Console.WriteLine("Day 6 pt. 2. Index of first sequence start: " + new DaySix(File.ReadAllText("./input/day6")).SolvePartTwo());
+*/
+Console.WriteLine("Day 7 pt. 1. Sum of directories over a total size of at most 100000: " + new DaySeven(File.ReadAllText("./input/day7")).SolvePartOne());
