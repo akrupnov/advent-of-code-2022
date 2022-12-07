@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Solutions.Shared;
 
 namespace Solutions
 {
@@ -13,18 +14,25 @@ namespace Solutions
 
         public override string SolvePartOne()
         {
-            Shared.Directory currentParent = null;
-            var flatNodes = new Dictionary<String, Shared.Node>(){ {"/", new Shared.Directory("/")} };
+            Dictionary<string, Node> flatNodes = GetFlatNodes();
 
-            
-            foreach(var statement in Input.Split(Environment.NewLine))
+            return SumDirectoriesUnderSize((flatNodes["/"] as Shared.Directory).Childs.OfType<Shared.Directory>(), 100000).ToString();
+        }
+
+        private Dictionary<string, Node> GetFlatNodes()
+        {
+            Shared.Directory currentParent = null;
+            var flatNodes = new Dictionary<String, Shared.Node>() { { "/", new Shared.Directory("/") } };
+
+
+            foreach (var statement in Input.Split(Environment.NewLine))
             {
                 var statementArguments = statement.Split(" ");
-                if(statementArguments[0] == "$")
+                if (statementArguments[0] == "$")
                 {
-                    if(statementArguments[1] == "cd")
+                    if (statementArguments[1] == "cd")
                     {
-                        if(statementArguments[2] != "..")
+                        if (statementArguments[2] != "..")
                         {
                             var newDirectory = currentParent != null ? $"{currentParent.Name}/{statementArguments[2]}".Replace("//", "/") : statementArguments[2];
                             currentParent = flatNodes[newDirectory] as Shared.Directory;
@@ -40,13 +48,13 @@ namespace Solutions
                     var nodeDescriptor = statement.Split(" ");
                     var nodeName = $"{currentParent.Name}/{nodeDescriptor[1]}".Replace("//", "/");
                     Shared.Node node;
-                    if(flatNodes.ContainsKey(nodeName))
+                    if (flatNodes.ContainsKey(nodeName))
                     {
                         node = flatNodes[nodeName];
                     }
                     else
                     {
-                        if(nodeDescriptor[0] == "dir")
+                        if (nodeDescriptor[0] == "dir")
                         {
                             node = new Shared.Directory(nodeName);
                         }
@@ -59,10 +67,10 @@ namespace Solutions
                         flatNodes.Add(nodeName, node);
                     }
 
-                }                
+                }
             }
 
-            return SumDirectoriesUnderSize((flatNodes["/"] as Shared.Directory).Childs.OfType<Shared.Directory>(), 100000).ToString();
+            return flatNodes;
         }
 
         private Int32 SumDirectoriesUnderSize(IEnumerable<Shared.Directory> directories, int sizeThreshold)
@@ -76,7 +84,19 @@ namespace Solutions
 
         public override string SolvePartTwo()
         {
-            throw new NotImplementedException();
+            Dictionary<string, Node> flatNodes = GetFlatNodes();
+            var root = (flatNodes["/"] as Shared.Directory);
+
+            return GetOversizedDirectories(root.Childs.OfType<Shared.Directory>(), 30000000 - (70000000 - root.Size)).OrderBy(x => x.Size).First().Size.ToString();
+        }
+
+        private IEnumerable<Shared.Directory> GetOversizedDirectories(IEnumerable<Shared.Directory> directories, int sizeThreshold)
+        {
+            if(!directories.Any())
+            {
+                return directories;
+            }
+            return Enumerable.Concat(directories.Where(x => x.Size >= sizeThreshold), GetOversizedDirectories(directories.SelectMany(x => x.Childs.OfType<Shared.Directory>()), sizeThreshold));    
         }
     }
 }
