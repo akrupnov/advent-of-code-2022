@@ -25,6 +25,9 @@ Console.WriteLine("Day 6 pt. 1. Index of first sequence start: " + new DaySix(Fi
 Console.WriteLine("Day 6 pt. 2. Index of first sequence start: " + new DaySix(File.ReadAllText("./input/day6")).SolvePartTwo());
 Console.WriteLine("Day 7 pt. 1. Sum of directories over a total size of at most 100000: " + new DaySeven(File.ReadAllText("./input/day7")).SolvePartOne());
 Console.WriteLine("Day 7 pt. 2. Size of smallest yet big enough directory is: " + new DaySeven(File.ReadAllText("./input/day7")).SolvePartTwo());
-*/
+
 Console.WriteLine("Day 8 pt. 1. Number of trees visible: " + new DayEight(File.ReadAllText("./input/day8")).SolvePartOne());
 Console.WriteLine("Day 8 pt. 2. Best scenic score is: " + new DayEight(File.ReadAllText("./input/day8")).SolvePartTwo());
+*/
+
+Console.WriteLine("Day 9 pt. 1. Number of fields: " + new DayNine(File.ReadAllText("./input/day9")).SolvePartOne());
