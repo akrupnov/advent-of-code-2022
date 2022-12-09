@@ -6,6 +6,8 @@ using Solutions.Shared;
 
 namespace Solutions
 {
+
+    #pragma warning disable 8602,8600
     public class DaySeven : AbstractSolution
     {
         public DaySeven(string input) : base(input)

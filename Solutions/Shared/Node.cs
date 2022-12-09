@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 namespace Solutions.Shared
 {
+    #pragma warning disable 8618
+
     public abstract class Node
     {
         public Node(String name)
