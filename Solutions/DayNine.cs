@@ -8,6 +8,12 @@ namespace Solutions
 {
     public class DayNine : AbstractSolution
     {
+        public class Knot
+        {
+            public (int, int) Coords {get;set;}
+            public Knot? Next {get;set;}
+        }
+
         public class FieldCell
         {
             public Int32 TailVisits {get; private set;}
@@ -37,13 +43,20 @@ namespace Solutions
         {
             var field = new Dictionary<(int, int), FieldCell>();
 
+            var rope = new LinkedList<(int, int)>();
+            for(int i = 0; i < 2; i++)
+            {
+                rope.AddLast((0, 0));
+            }
+            
+
             field[(0, 0)] = new FieldCell() { HostHead = true, HostTail = true };
 
-            var headCoords = (0, 0);
-            var tailCoords = (0, 0);
+            var headCoords = rope.First.ValueRef;
+
 
             foreach(var move in Input.Split(Environment.NewLine).Select(l => new {Direction = l.Split(' ')[0], Steps = Convert.ToInt32(l.Split(' ')[1])}))
-            {
+            {                
                 for(var i = 0; i < move.Steps; i++)
                 {
                     field[headCoords].HostHead = false;
@@ -65,34 +78,53 @@ namespace Solutions
                     }
 
                     GetFieldCell(field, headCoords).HostHead = true;
-                    if(GetDistance(headCoords, tailCoords) > 1.5)
+                    rope.First.Value = headCoords;
+
+                    var currentNode = rope.First;
+                    
+                    while(currentNode.Next != null)
                     {
-                        field[tailCoords].HostTail = false;
-                        if(headCoords.Item1 == tailCoords.Item1)
+                        currentNode = currentNode.Next;
+                        var prevCoords = currentNode.Previous.ValueRef;
+                        var currentCoords = currentNode.ValueRef;
+
+                        if(GetDistance(prevCoords, currentCoords) > 1.5)
                         {
-                            tailCoords.Item2 += (tailCoords.Item2 < headCoords.Item2 ? 1 : -1);
-                        }
-                        else if(headCoords.Item2 == tailCoords.Item2)
-                        {
-                            tailCoords.Item1 += (tailCoords.Item1 < headCoords.Item1 ? 1 : -1);
-                        }
-                        else
-                        {
-                            if(Math.Abs(headCoords.Item1 - tailCoords.Item1) == 2)
+                            if(currentNode == rope.Last)
                             {
-                                tailCoords.Item1 += (tailCoords.Item1 < headCoords.Item1 ? 1 : -1);
-                                tailCoords.Item2 = headCoords.Item2;
+                                field[currentCoords].HostTail = false;
+                            }
+                            
+                            if(prevCoords.Item1 == currentCoords.Item1)
+                            {
+                                currentCoords.Item2 += (currentCoords.Item2 < prevCoords.Item2 ? 1 : -1);
+                            }
+                            else if(prevCoords.Item2 == currentCoords.Item2)
+                            {
+                                currentCoords.Item1 += (currentCoords.Item1 < prevCoords.Item1 ? 1 : -1);
                             }
                             else
                             {
-                                tailCoords.Item2 += (tailCoords.Item2 < headCoords.Item2 ? 1 : -1);
-                                tailCoords.Item1 = headCoords.Item1;
+                                if(Math.Abs(prevCoords.Item1 - currentCoords.Item1) == 2)
+                                {
+                                    currentCoords.Item1 += (currentCoords.Item1 < prevCoords.Item1 ? 1 : -1);
+                                    currentCoords.Item2 = prevCoords.Item2;
+                                }
+                                else
+                                {
+                                    currentCoords.Item2 += (currentCoords.Item2 < prevCoords.Item2 ? 1 : -1);
+                                    currentCoords.Item1 = prevCoords.Item1;
+                                }
                             }
+                            if(currentNode == rope.Last)
+                            {
+                                GetFieldCell(field, currentCoords).HostTail = true;
+                            }
+                            currentNode.Value = currentCoords;
+
+                            //RenderField(field);
+
                         }
-
-                        GetFieldCell(field, tailCoords).HostTail = true;
-                        //RenderField(field);
-
                     }
                 }
 
