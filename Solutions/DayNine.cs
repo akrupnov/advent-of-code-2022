@@ -43,37 +43,59 @@ namespace Solutions
         {
             var field = new Dictionary<(int, int), FieldCell>();
 
+            LetTheRopeMove(field, 2);
+
+            return field.Where(x => x.Value.TailVisits > 0).Count().ToString();
+
+        }
+        public override string SolvePartTwo()
+        {
+            var field = new Dictionary<(int, int), FieldCell>();
+
+            LetTheRopeMove(field, 10);
+
+            return field.Where(x => x.Value.TailVisits > 0).Count().ToString();
+        }
+
+
+        private void LetTheRopeMove(Dictionary<(int, int), FieldCell> field, int numberOfKnots)
+        {
             var rope = new LinkedList<(int, int)>();
-            for(int i = 0; i < 2; i++)
+            for (int i = 0; i < numberOfKnots; i++)
             {
                 rope.AddLast((0, 0));
             }
-            
+
 
             field[(0, 0)] = new FieldCell() { HostHead = true, HostTail = true };
+
+            RenderField(field, rope);
 
             var headCoords = rope.First.ValueRef;
 
 
-            foreach(var move in Input.Split(Environment.NewLine).Select(l => new {Direction = l.Split(' ')[0], Steps = Convert.ToInt32(l.Split(' ')[1])}))
-            {                
-                for(var i = 0; i < move.Steps; i++)
+            foreach (var move in Input.Split(Environment.NewLine).Select(l => new { Direction = l.Split(' ')[0], Steps = Convert.ToInt32(l.Split(' ')[1]) }))
+            {
+
+                for (var i = 0; i < move.Steps; i++)
                 {
+                    //RenderField(field, rope);
+
                     field[headCoords].HostHead = false;
-                    
-                    switch(move.Direction)
+
+                    switch (move.Direction)
                     {
                         case "R":
-                            headCoords.Item1 +=1;
+                            headCoords.Item1 += 1;
                             break;
                         case "L":
-                            headCoords.Item1 -=1;
+                            headCoords.Item1 -= 1;
                             break;
                         case "U":
-                            headCoords.Item2 +=1;
+                            headCoords.Item2 += 1;
                             break;
                         case "D":
-                            headCoords.Item2 -=1;
+                            headCoords.Item2 -= 1;
                             break;
                     }
 
@@ -81,31 +103,36 @@ namespace Solutions
                     rope.First.Value = headCoords;
 
                     var currentNode = rope.First;
-                    
-                    while(currentNode.Next != null)
+
+                    while (currentNode.Next != null)
                     {
                         currentNode = currentNode.Next;
                         var prevCoords = currentNode.Previous.ValueRef;
                         var currentCoords = currentNode.ValueRef;
 
-                        if(GetDistance(prevCoords, currentCoords) > 1.5)
+                        if (GetDistance(prevCoords, currentCoords) > 1.5)
                         {
-                            if(currentNode == rope.Last)
+                            if (currentNode == rope.Last)
                             {
                                 field[currentCoords].HostTail = false;
                             }
-                            
-                            if(prevCoords.Item1 == currentCoords.Item1)
+
+                            if (prevCoords.Item1 == currentCoords.Item1)
                             {
                                 currentCoords.Item2 += (currentCoords.Item2 < prevCoords.Item2 ? 1 : -1);
                             }
-                            else if(prevCoords.Item2 == currentCoords.Item2)
+                            else if (prevCoords.Item2 == currentCoords.Item2)
                             {
                                 currentCoords.Item1 += (currentCoords.Item1 < prevCoords.Item1 ? 1 : -1);
                             }
                             else
                             {
-                                if(Math.Abs(prevCoords.Item1 - currentCoords.Item1) == 2)
+                                if (Math.Abs(prevCoords.Item1 - currentCoords.Item1) == 2 && Math.Abs(prevCoords.Item2 - currentCoords.Item2) == 2)
+                                {
+                                    currentCoords.Item1 += (currentCoords.Item1 < prevCoords.Item1 ? 1 : -1);
+                                    currentCoords.Item2 += (currentCoords.Item2 < prevCoords.Item2 ? 1 : -1);
+                                }
+                                else if (Math.Abs(prevCoords.Item1 - currentCoords.Item1) >= 2)
                                 {
                                     currentCoords.Item1 += (currentCoords.Item1 < prevCoords.Item1 ? 1 : -1);
                                     currentCoords.Item2 = prevCoords.Item2;
@@ -116,26 +143,18 @@ namespace Solutions
                                     currentCoords.Item1 = prevCoords.Item1;
                                 }
                             }
-                            if(currentNode == rope.Last)
-                            {
-                                GetFieldCell(field, currentCoords).HostTail = true;
-                            }
+                            GetFieldCell(field, currentCoords).HostTail = currentNode == rope.Last;
+                            
                             currentNode.Value = currentCoords;
-
-                            //RenderField(field);
 
                         }
                     }
                 }
 
             }
-
-            //RenderField(field);
-            
-
-            return field.Where(x => x.Value.TailVisits > 0).Count().ToString();
-
+            RenderField(field, rope);
         }
+
         private static double GetDistance((int, int) first , (int, int) second)
         {
              return Math.Sqrt(Math.Pow((second.Item1 - first.Item1), 2) + Math.Pow((second.Item2 - first.Item2), 2));
@@ -149,32 +168,53 @@ namespace Solutions
             return field[coords];
         }
 
-        private static void RenderField(Dictionary<(int, int), FieldCell> field)
+        private static void RenderField(Dictionary<(int, int), FieldCell> field, LinkedList<(int, int)> rope)
         {
-            var maxY = field.Max(x => x.Key.Item2);
             var maxX = field.Max(x => x.Key.Item1);
+            var maxY = field.Max(x => x.Key.Item2);
+            
+            
+            var xShift = Math.Abs(field.Min(x => x.Key.Item1));
+            var yShift = Math.Abs(field.Min(x => x.Key.Item2));;
+
             Console.Clear();
-            for (var i = 0; i <= maxY; i++)
+            for (var i = 0; i <= maxY + yShift; i++)
             {
-                for (var j = 0; j <= maxX; j++)
+                for (var j = 0; j <= maxX + xShift; j++)
                 {
-                    Console.SetCursorPosition(j, i);
+                    Console.SetCursorPosition(j + xShift, i + yShift);
                     Console.Write('.');
                 }
             }
             foreach (var fieldEntry in field)
             {
-                Console.SetCursorPosition(fieldEntry.Key.Item1, maxY - fieldEntry.Key.Item2);
-                Console.Write(fieldEntry.Value.HostHead ? "H" : (fieldEntry.Value.HostTail ? "T" : fieldEntry.Value.TailVisits >0 ? "X" : "."));
+                Console.SetCursorPosition(xShift + fieldEntry.Key.Item1, yShift + maxY - fieldEntry.Key.Item2);
+                if(fieldEntry.Value.HostHead)
+                {
+                    Console.Write("H");
+                }
+                else if(rope.Contains(fieldEntry.Key))
+                {
+                    var iterator = 0;
+                    foreach(var knot in rope)
+                    {
+                        if(knot == fieldEntry.Key)
+                        {
+                            Console.Write(iterator);
+                            break;
+                        }
+                        iterator++;
 
+                    }
+                }
+                else if (fieldEntry.Value.TailVisits > 0)
+                {
+                    Console.Write("#");
+                }
             }
             if(!Debugger.IsAttached)
                 Console.ReadKey();
         }
 
-        public override string SolvePartTwo()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

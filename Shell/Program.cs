@@ -30,4 +30,5 @@ Console.WriteLine("Day 8 pt. 1. Number of trees visible: " + new DayEight(File.R
 Console.WriteLine("Day 8 pt. 2. Best scenic score is: " + new DayEight(File.ReadAllText("./input/day8")).SolvePartTwo());
 */
 
-Console.WriteLine("Day 9 pt. 1. Number of fields: " + new DayNine(File.ReadAllText("./input/day9")).SolvePartOne());
+//Console.WriteLine("Day 9 pt. 1. Number of fields visited with 2 knots: " + new DayNine(File.ReadAllText("./input/day9")).SolvePartOne());
+Console.WriteLine("Day 9 pt. 1. Number of fields visited with 10 knots: " + new DayNine(File.ReadAllText("./input/day9")).SolvePartTwo());
