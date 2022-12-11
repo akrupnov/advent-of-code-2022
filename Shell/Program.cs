@@ -28,7 +28,9 @@ Console.WriteLine("Day 7 pt. 2. Size of smallest yet big enough directory is: " 
 
 Console.WriteLine("Day 8 pt. 1. Number of trees visible: " + new DayEight(File.ReadAllText("./input/day8")).SolvePartOne());
 Console.WriteLine("Day 8 pt. 2. Best scenic score is: " + new DayEight(File.ReadAllText("./input/day8")).SolvePartTwo());
-*/
 
-//Console.WriteLine("Day 9 pt. 1. Number of fields visited with 2 knots: " + new DayNine(File.ReadAllText("./input/day9")).SolvePartOne());
-Console.WriteLine("Day 9 pt. 1. Number of fields visited with 10 knots: " + new DayNine(File.ReadAllText("./input/day9")).SolvePartTwo());
+
+Console.WriteLine("Day 9 pt. 1. Number of fields visited with 2 knots: " + new DayNine(File.ReadAllText("./input/day9")).SolvePartOne());
+Console.WriteLine("Day 9 pt. 2. Number of fields visited with 10 knots: " + new DayNine(File.ReadAllText("./input/day9")).SolvePartTwo());
+*/
+Console.WriteLine("Day 10 pt. 1. Sum of signal strengths: " + new DayTen(File.ReadAllText("./input/day10")).SolvePartOne());
