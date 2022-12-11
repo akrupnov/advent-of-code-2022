@@ -32,5 +32,8 @@ Console.WriteLine("Day 8 pt. 2. Best scenic score is: " + new DayEight(File.Read
 
 Console.WriteLine("Day 9 pt. 1. Number of fields visited with 2 knots: " + new DayNine(File.ReadAllText("./input/day9")).SolvePartOne());
 Console.WriteLine("Day 9 pt. 2. Number of fields visited with 10 knots: " + new DayNine(File.ReadAllText("./input/day9")).SolvePartTwo());
-*/
+
 Console.WriteLine("Day 10 pt. 1. Sum of signal strengths: " + new DayTen(File.ReadAllText("./input/day10")).SolvePartOne());
+
+*/
+Console.WriteLine("Day 10 pt. 2. Sprite bullshit: " + new DayTen(File.ReadAllText("./input/day10")).SolvePartTwo());

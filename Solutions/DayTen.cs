@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Solutions
@@ -43,7 +44,38 @@ namespace Solutions
 
         public override string SolvePartTwo()
         {
-            throw new NotImplementedException();
+            var cycle = 0;
+            var cycleRecord = new Dictionary<Int32, Int32>();
+            var register = 1;
+
+            var spriteBuilder = new StringBuilder();
+            
+            foreach(var command in Input.Split(Environment.NewLine).Select(x => x.Split(' ')).Select(x => new {
+                Name = x[0],
+                Value = x.Length == 1 ? 0 : Convert.ToInt32(x[1])
+            }))
+            {
+                if(command.Name == "noop")
+                {
+                    spriteBuilder.Append(Enumerable.Range(register - 1, 3).Contains(cycle % 40) ? "#" : ".");
+                    cycle++;
+                    cycleRecord[cycle] = register;
+                }
+                else 
+                {
+                    spriteBuilder.Append(Enumerable.Range(register - 1, 3).Contains(cycle % 40) ? "#" : ".");
+                    cycle++;
+                    cycleRecord[cycle] = register;
+                    spriteBuilder.Append(Enumerable.Range(register - 1, 3).Contains(cycle % 40) ? "#" : ".");
+                    cycle++;
+                    cycleRecord[cycle] = register;
+                    register += command.Value;                    
+                }
+
+            }
+
+
+            return Environment.NewLine +  String.Join(Environment.NewLine, spriteBuilder.ToString().Chunk(40).Select(x => new String(x.ToArray())));
         }
     }
 }
