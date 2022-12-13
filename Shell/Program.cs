@@ -35,5 +35,7 @@ Console.WriteLine("Day 9 pt. 2. Number of fields visited with 10 knots: " + new 
 
 Console.WriteLine("Day 10 pt. 1. Sum of signal strengths: " + new DayTen(File.ReadAllText("./input/day10")).SolvePartOne());
 Console.WriteLine("Day 10 pt. 2. Sprite bullshit: " + new DayTen(File.ReadAllText("./input/day10")).SolvePartTwo());
-*/
+
 Console.WriteLine("Day 11 pt. 1. Monkey Business: " + new DayEleven(File.ReadAllText("./input/day11")).SolvePartOne());
+*/
+Console.WriteLine("Day 11 pt. 2. Monkey Business: " + new DayEleven(File.ReadAllText("./input/day11")).SolvePartTwo());
