@@ -37,5 +37,7 @@ Console.WriteLine("Day 10 pt. 1. Sum of signal strengths: " + new DayTen(File.Re
 Console.WriteLine("Day 10 pt. 2. Sprite bullshit: " + new DayTen(File.ReadAllText("./input/day10")).SolvePartTwo());
 
 Console.WriteLine("Day 11 pt. 1. Monkey Business: " + new DayEleven(File.ReadAllText("./input/day11")).SolvePartOne());
-*/
 Console.WriteLine("Day 11 pt. 2. Monkey Business: " + new DayEleven(File.ReadAllText("./input/day11")).SolvePartTwo());
+
+*/
+Console.WriteLine("Day 12 pt. 1. Shortest path: " + new DayTwelve(File.ReadAllText("./input/day12")).SolvePartOne());
