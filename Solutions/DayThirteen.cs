@@ -9,6 +9,7 @@ namespace Solutions
     public class DayThirteen : AbstractSolution
     {
         private enum ElementType {Integer, List}
+        private enum CompareResult {Right, Wrong, Inconclusive}
         
         private class PacketElement 
         {
@@ -38,28 +39,66 @@ namespace Solutions
             {
                 index++;
 
-                packetStatuses[index] = true;
-                
-                var currentLeftIndex = 0;
-                var currentRightIndex = 0;
                 var left = packetPair.First();
                 var right = packetPair.Skip(1).First();
+                var test = ComparePackets(left, right);
+                packetStatuses[index] = ComparePackets(left, right) == CompareResult.Right;
+            }
+
+            return packetStatuses.Where(x => x.Value == true).Select(x => x.Key).Sum().ToString();
+        }
+
+        private CompareResult ComparePackets(String left, String right)
+        {
+                var currentLeftIndex = 0;
+                var currentRightIndex = 0;
                 
-                while(currentLeftIndex < left.Length)
+                while(true)
                 {
                     var leftElement = TakeNextElement(left, currentLeftIndex);
                     var rightElement = TakeNextElement(right, currentRightIndex);
+                    if(leftElement == null || rightElement == null)
+                    {
+                        if(leftElement == null && rightElement == null)
+                        {
+                            return CompareResult.Inconclusive;
+                        }
+                        return leftElement == null ? CompareResult.Right : CompareResult.Wrong;
+                    }
+                    if(leftElement.Type == ElementType.Integer 
+                        && rightElement.Type == ElementType.Integer )
+                    {
+                        if(Convert.ToInt32(leftElement.Value) != Convert.ToInt32(rightElement.Value))
+                        {
+                            return  Convert.ToInt32(leftElement.Value) < Convert.ToInt32(rightElement.Value) ? CompareResult.Right : CompareResult.Wrong;
+                        }
+                    }
+                    else
+                    {
+                        var listCompareResult = ComparePackets(
+                            leftElement.Type == ElementType.List ? leftElement.Value.Substring(1, leftElement.Value.Length - 2) : leftElement.Value, 
+                            rightElement.Type == ElementType.List ? rightElement.Value.Substring(1, rightElement.Value.Length - 2) : rightElement.Value);
+
+                        if(listCompareResult != CompareResult.Inconclusive)
+                        {
+                            return listCompareResult;
+                        }
+                    }
+
+
                     currentLeftIndex = leftElement.EndIndex + 1;
                     currentRightIndex = rightElement.EndIndex + 1;
                 }
-                
-            }
 
-            throw new Exception();
+            return CompareResult.Inconclusive;
         }
 
         private PacketElement TakeNextElement(String packet, Int32 startingIndex)
         {
+            if(startingIndex >= packet.Length)
+            {
+                return null;
+            }
             var retvalBuilder = new StringBuilder();
             var type = ElementType.List;
             var finalIndex = startingIndex;
@@ -77,6 +116,26 @@ namespace Solutions
                     retvalBuilder.Append(packet[i]);
 
                 }
+            }
+            else
+            {
+                type = ElementType.List;
+                var opened = 0;
+                var closed = 0;
+
+                for(var i = startingIndex; i < packet.Length; i++)
+                {
+                    retvalBuilder.Append(packet[i]);
+                    opened += packet[i] == ']' ? 1 : 0;
+                    closed += packet[i] == '[' ? 1 : 0;
+
+                    if(opened == closed)
+                    {
+                        finalIndex = i + 1;
+                        break;
+                    }
+                }
+
             }
             return new PacketElement() {
                 Value = retvalBuilder.ToString(),
