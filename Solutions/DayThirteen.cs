@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Solutions
 {
-    public class DayThirteen : AbstractSolution
+    public class DayThirteen : AbstractSolution, IComparer<String>
     {
         private enum ElementType {Integer, List}
         private enum CompareResult {Right, Wrong, Inconclusive}
@@ -47,6 +47,18 @@ namespace Solutions
 
             return packetStatuses.Where(x => x.Value == true).Select(x => x.Key).Sum().ToString();
         }
+
+        public override string SolvePartTwo()
+        {
+            var flatInput = Input.Replace($"{Environment.NewLine}{Environment.NewLine}", Environment.NewLine).Split(Environment.NewLine).ToList();
+            var dividers = new string[] {"[[2]]", "[[6]]"};
+            flatInput.AddRange(dividers);
+            return flatInput.OrderBy(x => x, this).Select((s, i) => new {i, s})
+                .Where(t => dividers.Contains(t.s))
+                .Select(t => t.i + 1)
+                .ToList().Aggregate(1, (x, y) => x*y).ToString();
+        }
+
 
         private CompareResult ComparePackets(String left, String right)
         {
@@ -144,9 +156,18 @@ namespace Solutions
             };
         }
 
-        public override string SolvePartTwo()
+        public int Compare(string? x, string? y)
         {
-            throw new NotImplementedException();
+            var result = ComparePackets(x, y);
+            if(result == CompareResult.Inconclusive)
+            {
+                return 0;
+            }
+            if(result == CompareResult.Right)
+            {
+                return -1;
+            }
+            return 1;
         }
     }
 }
