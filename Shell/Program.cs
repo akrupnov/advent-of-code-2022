@@ -44,5 +44,7 @@ Console.WriteLine("Day 12 pt. 2. Shortesttest path: " + new DayTwelve(File.ReadA
 
 Console.WriteLine("Day 13 pt. 1. Sum of right order indices: " + new DayThirteen(File.ReadAllText("./input/day13")).SolvePartOne());
 Console.WriteLine("Day 13 pt. 2. Multiplied indices of divider packets: " + new DayThirteen(File.ReadAllText("./input/day13")).SolvePartTwo());
-*/
 Console.WriteLine("Day 14 pt. 1. Number of steps: " + new DayFourteen(File.ReadAllText("./input/day14")).SolvePartOne());
+*/
+
+Console.WriteLine("Day 14 pt. 2. Number of steps: " + new DayFourteen(File.ReadAllText("./input/day14")).SolvePartTwo());
